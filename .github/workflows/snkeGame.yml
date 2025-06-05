@@ -18,8 +18,8 @@ jobs:
         run: |
           mkdir -p package
           cd out
-          timestamp=date +%Y%m%d_%H%M%S
-          jar cvfm ../package/SnakeGame_$timestamp.jar ../src/MANIFEST.MF *.class
+          timestamp=$(date +%Y%m%d_%H%M%S)
+          jar cvfm ../package/SnakeGame_${timestamp}.jar ../src/MANIFEST.MF *.class
           cd ..
       - name: Upload artifact
         uses: actions/upload-artifact@v4
