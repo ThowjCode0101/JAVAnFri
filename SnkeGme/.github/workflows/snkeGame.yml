@@ -1,0 +1,42 @@
+name: snkeGame
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Build with Java
+      run: |
+        mkdir -p out
+        javac -d out src/*.java
+        
+    - name: Create JAR with timestamp
+      run: |
+        mkdir -p package
+        cd out
+        timestamp=$(date +%Y%m%d_%H%M%S)
+        jar cvfm ../package/SnakeGame_${timestamp}.jar ../src/MANIFEST.MF *
+        cd ..
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: SnakeGame_Package
+        path: package/*.jar
